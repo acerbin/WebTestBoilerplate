@@ -1,4 +1,4 @@
-# clientSideTestBoilerplate
+# Client Side Test Boilerplate
 ### Prerequisites
 
 1. Java
