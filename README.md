@@ -14,7 +14,7 @@
 
 ### Running tests
 
-npm run open //opens the desktop runner
+npm run open //opens the desktop runner /n
 npm run testBasic //run a basic test
 
 
