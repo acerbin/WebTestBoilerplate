@@ -1,0 +1,23 @@
+{
+  "name": "CT",
+  "version": "1.0.0",
+  "description": "Cypress UI test boilerplate",
+  "main": "index.js",
+  "scripts": {
+    "open": "./node_modules/.bin/cypress open",
+    "testBasic": "cypress run --spec \"cypress/integration/basic/*\""
+  },
+  "keywords": [
+    "cypress",
+    "browser",
+    "ui"
+  ],
+  "author": "Katrina Savova",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^7.3.0"
+  },
+  "dependencies": {
+    "cypress-plugin-snapshots": "^1.4.4"
+  }
+}

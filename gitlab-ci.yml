@@ -1,0 +1,161 @@
+# Docker images provided by https://github.com/cypress-io/cypress-docker-images
+
+# first, install Cypress, then run all tests (in parallel)
+stages:
+  - build
+  - test
+
+# to cache both npm modules and Cypress binary we use environment variables
+# to point at the folders we can list as paths in "cache" job settings
+variables:
+  # npm_config_cache: /builds/cypress-io/cypress-example-docker-gitlab/.npm
+  # CYPRESS_CACHE_FOLDER: /builds/cypress-io/cypress-example-docker-gitlab/cache/Cypress
+  npm_config_cache: "$CI_PROJECT_DIR/.npm"
+  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
+
+# cache using branch name
+# https://gitlab.com/help/ci/caching/index.md
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .npm
+    - cache/Cypress
+    - node_modules
+
+# this job installs NPM dependencies and Cypress
+install:
+  image: cypress/base:10
+  stage: build
+
+  script:
+    - npm install
+    - $(npm bin)/cypress verify
+  when: manual
+  allow_failure: true
+
+
+# two jobs that run after "install" job finishes
+# NPM dependencies and Cypress binary should be already installed
+cypress-e2e_1:
+  image: cypress/base:10
+  stage: test
+  script:
+    - pwd
+    - ls
+    - echo $JOB_NAME
+    - npm run ${JOB_NAME} -- --parallel --record --key ${PROJECT_KEY}
+  artifacts:
+    when: always
+    expire_in: 1 week
+    paths:
+    - cypress/videos
+  when: always
+  only:
+    - tags
+    - schedules
+    - web
+  allow_failure: true
+
+
+cypress-e2e_2:
+  image: cypress/base:10
+  stage: test
+  script:
+    - $(npm bin)/cypress verify
+    - npm run ${JOB_NAME} -- --parallel --record --key ${PROJECT_KEY}
+  artifacts:
+    when: always
+    expire_in: 1 week
+    paths:
+    - cypress/videos
+  when: always
+  only:
+    - tags
+    - schedules
+    - web
+  allow_failure: true
+
+cypress-e2e_3:
+  image: cypress/base:10
+  stage: test
+  script:
+    - $(npm bin)/cypress verify
+    - npm run ${JOB_NAME} -- --parallel --record --key ${PROJECT_KEY}
+  artifacts:
+    when: always
+    expire_in: 1 week
+    paths:
+    - cypress/videos
+  when: always
+  only:
+    - tags
+    - schedules
+    - web
+  allow_failure: true
+
+cypress-e2e_4:
+  image: cypress/base:10
+  stage: test
+  script:
+    - $(npm bin)/cypress verify
+    - npm run ${JOB_NAME} -- --parallel --record --key ${PROJECT_KEY}
+  artifacts:
+    when: always
+    expire_in: 1 week
+    paths:
+    - cypress/videos
+  when: always
+  only:
+    - tags
+    - schedules
+    - web
+  allow_failure: true
+  
+cypress-e2e_5:
+  image: cypress/base:10
+  stage: test
+  script:
+    - $(npm bin)/cypress verify
+    - npm run ${JOB_NAME} -- --parallel --record --key ${PROJECT_KEY}
+  artifacts:
+    when: always
+    expire_in: 1 week
+    paths:
+    - cypress/videos
+  when: always
+  only:
+    - tags
+    - schedules
+    - web
+  allow_failure: true
+
+testBasic:
+  image: cypress/base:10
+  stage: test
+  script:
+    - $(npm bin)/cypress verify
+    - npm run testBasic -- --config-file config/${JOB_NAME}.json
+  artifacts:
+    when: always
+    expire_in: 1 week
+    paths:
+    - cypress/videos
+  when: always
+  only:
+    - tags
+    - schedules
+    - web
+  allow_failure: true
+
+
+# cypress-e2e-chrome:
+#   image: cypress/browsers:chrome69
+#   stage: test
+#   script:
+#     - npm install
+#     - npm run testBasic -- --browser chrome
+#   artifacts:
+#     expire_in: 1 week
+#     paths:
+#     - cypress/screenshots
+#     - cypress/videos
